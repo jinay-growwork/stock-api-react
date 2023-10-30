@@ -9,7 +9,7 @@ import {
   stockDataSuccess,
 } from "./action";
 
-const apiKey = "JPRM3WKKDTY02Y81";
+const apiKey = "demo";
 function* fetchStock(data) {
   const keyWord = data.payload ? data.payload : "tesco";
   try {

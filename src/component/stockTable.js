@@ -11,7 +11,6 @@ const StockTable = ({
   stockDataRequest,
   stocksData,
 }) => {
- 
   const [selectedOption, setSelectedOption] = useState(null);
   const [stock, setStock] = useState("Stock");
   const [isMonth, setIsmonth] = useState(null);
@@ -33,8 +32,6 @@ const StockTable = ({
     }
   };
 
-
-
   const handleMonthData = (e, symbol) => {
     e.preventDefault();
     stockDataRequest({ symbol: symbol, isMonth: true });
@@ -47,14 +44,23 @@ const StockTable = ({
     setIsmonth(false);
     setStock(symbol);
   };
-
+  console.info("----------------------------");
+  console.info("selectedOption =>", selectedOption);
+  console.info("----------------------------");
   useEffect(() => {
-    const filteredStocks =
-      stocks?.filter((item) => {
-        return item["1. symbol"] === selectedOption?.value;
-      }) || [];
-    setFilteredStocks(filteredStocks);
+    console.info("----------------------------");
+    console.info("stocks =>", stocks);
+    console.info("----------------------------");
+    const arr = stocks?.filter((item) => {
+      return item["1. symbol"] === selectedOption?.value;
+    });
+
+    setFilteredStocks(arr || []);
   }, [selectedOption, stocks]);
+
+  console.info("----------------------------");
+  console.info("filteredStocks =>", filteredStocks);
+  console.info("----------------------------");
 
   if (loading) {
     return (
