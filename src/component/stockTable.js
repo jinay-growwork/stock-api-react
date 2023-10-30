@@ -11,7 +11,7 @@ const StockTable = ({
   stockDataRequest,
   stocksData,
 }) => {
-  const [searchQuery, setSearchQuery] = useState("");
+ 
   const [selectedOption, setSelectedOption] = useState(null);
   const [stock, setStock] = useState("Stock");
   const [isMonth, setIsmonth] = useState(null);
@@ -32,15 +32,8 @@ const StockTable = ({
       callback([]);
     }
   };
-  useEffect(() => {
-    const data = stocks?.filter((stock) =>
-      stock["1. symbol"].toLowerCase().includes(searchQuery.toLowerCase())
-    );
-    setFilteredStocks(data);
-  }, [searchQuery, stocks]);
-  useEffect(() => {
-    fetchStockRequest(searchQuery);
-  }, [fetchStockRequest, searchQuery]);
+
+
 
   const handleMonthData = (e, symbol) => {
     e.preventDefault();
