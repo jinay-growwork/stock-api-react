@@ -119,7 +119,7 @@ const StockTable = ({
           getOptionValue={(option) => option.value}
           placeholder="Search by Symbol"
         />
-        <h2>Stock List..!!!!</h2>
+        <h2>Stock List.</h2>
         <table>
           <thead>
             <tr>
