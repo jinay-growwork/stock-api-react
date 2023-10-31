@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { fetchStockRequest, stockDataRequest } from "../redux/action";
 import "./stockTable.css";
 import AsyncSelect from "react-select/async";
+import debounce from "lodash/debounce";
 const StockTable = ({
   stocks,
   fetchStockRequest,
@@ -16,21 +17,21 @@ const StockTable = ({
   const [isMonth, setIsmonth] = useState(null);
   const [filteredStocks, setFilteredStocks] = useState([]);
 
-  const loadOptions = async (inputValue, callback) => {
+  const debouncedLoadOptions = debounce(async (inputValue, callback) => {
     try {
-      fetchStockRequest(inputValue);
-
-      const options = stocks?.map((stock) => ({
-        value: stock["1. symbol"],
-        label: `${stock["1. symbol"]} (${stock["2. name"]})`,
-      }));
-
-      callback(options);
+      setTimeout(() => {
+        fetchStockRequest(inputValue);
+        const options = stocks?.map((stock) => ({
+          value: stock["1. symbol"],
+          label: `${stock["1. symbol"]} (${stock["2. name"]})`,
+        }));
+        callback(options);
+      }, 1000); // 1-second delay
     } catch (error) {
       console.error("Error fetching stock options: ", error);
       callback([]);
     }
-  };
+  }, 300);
 
   const handleMonthData = (e, symbol) => {
     e.preventDefault();
@@ -47,18 +48,11 @@ const StockTable = ({
 
   useEffect(() => {
     const arr = stocks?.filter((item) => {
-      console.info("----------------------------");
-      console.info("item =>", item["1. symbol"]);
-      console.info("----------------------------");
       return item["1. symbol"] === selectedOption?.value;
     });
-
     setFilteredStocks(arr || []);
   }, [selectedOption, stocks]);
 
-  console.info("----------------------------");
-  console.info("filteredStocks =>", filteredStocks);
-  console.info("----------------------------");
   const handleOnChange = (item) => {
     fetchStockRequest(item.value);
     setSelectedOption(item);
@@ -74,18 +68,20 @@ const StockTable = ({
   if (error) {
     return <div>Error occurred: {error.message}</div>;
   }
-
   return (
     <>
       <div className="table-container">
         <AsyncSelect
           cacheOptions
-          loadOptions={loadOptions}
+          loadOptions={(inputValue, callback) =>
+            debouncedLoadOptions(inputValue, callback)
+          }
           defaultOptions
           value={selectedOption}
           onChange={(selected) => handleOnChange(selected)}
           getOptionLabel={(option) => option.label}
           getOptionValue={(option) => option.value}
+          // onInputChange={(item) => item && fetchStockRequest(item)}
           placeholder="Search by Symbol"
         />
         <h2>Stock List</h2>

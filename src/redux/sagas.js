@@ -11,7 +11,7 @@ import {
 
 const apiKey = "XNKWMKJSUOWR1D6X";
 function* fetchStock(data) {
-  const keyWord = data.payload ? data.payload : "tesco";
+  const keyWord = data.payload;
   try {
     const response = yield call(
       axios.get,
