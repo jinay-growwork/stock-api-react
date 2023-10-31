@@ -44,14 +44,12 @@ const StockTable = ({
     setIsmonth(false);
     setStock(symbol);
   };
-  console.info("----------------------------");
-  console.info("selectedOption =>", selectedOption);
-  console.info("----------------------------");
+
   useEffect(() => {
-    console.info("----------------------------");
-    console.info("stocks =>", stocks);
-    console.info("----------------------------");
     const arr = stocks?.filter((item) => {
+      console.info("----------------------------");
+      console.info("item =>", item["1. symbol"]);
+      console.info("----------------------------");
       return item["1. symbol"] === selectedOption?.value;
     });
 
@@ -61,7 +59,10 @@ const StockTable = ({
   console.info("----------------------------");
   console.info("filteredStocks =>", filteredStocks);
   console.info("----------------------------");
-
+  const handleOnChange = (item) => {
+    fetchStockRequest(item.value);
+    setSelectedOption(item);
+  };
   if (loading) {
     return (
       <div className="spinner-container">
@@ -77,43 +78,12 @@ const StockTable = ({
   return (
     <>
       <div className="table-container">
-        {/* <Autocomplete
-          getItemValue={(item) => item && item["1. symbol"]}
-          items={filteredStocks}
-          renderItem={(item, isHighlighted) => (
-            <div
-              key={item["1. symbol"]}
-              style={{
-                background: isHighlighted ? "lightgray" : "white",
-                padding: "10px",
-                cursor: "pointer",
-              }}
-            >
-              {`${item["1. symbol"]} (${item["2. name"]})`}
-            </div>
-          )}
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          onSelect={(value) => setSearchQuery(value)}
-          inputProps={{
-            placeholder: "Search by Symbol",
-            style: {
-              width: "200%",
-              padding: "10px",
-              fontSize: "16px",
-              border: "1px solid #ccc",
-              borderRadius: "5px",
-              boxSizing: "border-box",
-              marginBottom: "10px",
-            },
-          }}
-        /> */}
         <AsyncSelect
           cacheOptions
           loadOptions={loadOptions}
           defaultOptions
           value={selectedOption}
-          onChange={(selected) => setSelectedOption(selected)}
+          onChange={(selected) => handleOnChange(selected)}
           getOptionLabel={(option) => option.label}
           getOptionValue={(option) => option.value}
           placeholder="Search by Symbol"
